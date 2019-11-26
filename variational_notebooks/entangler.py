@@ -1,4 +1,4 @@
-def get_entangler_map(map_type='full', num_qubits=8):
+def get_entangler_map(map_type='full', num_qubits=9):
     """
         Utility method to get an entangler map among qubits.
         
