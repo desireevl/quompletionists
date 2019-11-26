@@ -1,6 +1,7 @@
-import torch
+import matplotlib.patches as patches
 import os
 import random
+import torch
 
 from matplotlib import pyplot as plt
 from torchvision import datasets, transforms
@@ -102,10 +103,21 @@ test_celeb_face_loader = DataTransformer(
 
 
 if __name__ == '__main__':
-    for idx, ((i, j), X, Y, label, source, (cropX, cropY)) in enumerate(train_fashion_loader):
-        print(idx, (i, j), X, Y, label)
+    for idx, ((i, j), train, target, label, source, (cropX, cropY)) in enumerate(train_fashion_loader):
+        print(idx, (i, j), train, target, label)
+
+        new_window_values = train.reshape(3, 3)
+
+        source[cropY:cropY+3, cropX:cropX+3] = new_window_values
+
+        fig_wind = plt.figure()
+        ax_wind = fig_wind.add_subplot(111)
+        ax_wind.imshow(new_window_values, cmap=plt.cm.gray)
+        fig_wind.savefig(f'./images/window_{idx}.png')
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
+        rect = patches.Rectangle((cropX-1, cropY-1),4,4,linewidth=1,edgecolor='r',facecolor='none')
+        ax.add_patch(rect)
         ax.imshow(source, cmap=plt.cm.gray)
-        plt.show()
+        fig.savefig(f'./images/full_{idx}.png')
