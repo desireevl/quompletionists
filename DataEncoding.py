@@ -7,3 +7,4 @@ def encoding(x):
         for wire1 in range(wires):                          #Then add entanglers
             for wire2 in range(wire+1, wires):
                 qml.CRZ(pi, wires = [wire1, wire2])
+        #Now implement ansatz circuit
