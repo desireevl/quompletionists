@@ -77,5 +77,5 @@ test_celeb_face_loader = DataTransformer(
 
 
 if __name__ == '__main__':
-    for idx, (data) in enumerate(test_celeb_face_loader):
-        print(idx, data)
+    for idx, ((i, j), X, Y) in enumerate(test_celeb_face_loader):
+        print(idx, (i, j), X, Y)
