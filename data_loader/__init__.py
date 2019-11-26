@@ -16,11 +16,19 @@ class DataTransformer(object):
 
     def next(self):
         data = next(self.dataloader)
-        data = data[0]
-        data = data.reshape(-1)
-        target = data[-1].clone()
-        data[-1] = 0.0
-        return (2, 2), data, target
+        label = None
+
+        try:
+            label = data[1]
+        
+        except:
+            pass
+
+        original = data[0]
+        original = original.reshape(-1)
+        target = original[-1].clone()
+        original[-1] = 0.0
+        return (2, 2), original, target, label
 
 
 file_abs_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -77,5 +85,5 @@ test_celeb_face_loader = DataTransformer(
 
 
 if __name__ == '__main__':
-    for idx, ((i, j), X, Y) in enumerate(test_celeb_face_loader):
-        print(idx, (i, j), X, Y)
+    for idx, ((i, j), X, Y, label) in enumerate(train_fashion_loader):
+        print(idx, (i, j), X, Y, label)
