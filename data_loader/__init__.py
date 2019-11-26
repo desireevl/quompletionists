@@ -1,8 +1,8 @@
 import torch
 import os
 
+from matplotlib import pyplot as plt
 from torchvision import datasets, transforms
-
 
 class DataTransformer(object):
     def __init__(self, dataloader):
@@ -79,3 +79,8 @@ test_celeb_face_loader = DataTransformer(
 if __name__ == '__main__':
     for idx, ((i, j), X, Y) in enumerate(test_celeb_face_loader):
         print(idx, (i, j), X, Y)
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.imshow(X.reshape(3,3), cmap=plt.cm.gray)
+        plt.show()
