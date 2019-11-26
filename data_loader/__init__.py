@@ -112,12 +112,12 @@ if __name__ == '__main__':
 
         fig_wind = plt.figure()
         ax_wind = fig_wind.add_subplot(111)
-        ax_wind.imshow(new_window_values, cmap=plt.cm.gray)
+        ax_wind.imshow(new_window_values, cmap=plt.cm.gray, vmin=0, vmax=1)
         fig_wind.savefig(f'./images/window_{idx}.png')
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
         rect = patches.Rectangle((cropX-1, cropY-1),4,4,linewidth=1,edgecolor='r',facecolor='none')
         ax.add_patch(rect)
-        ax.imshow(source, cmap=plt.cm.gray)
+        ax.imshow(source, cmap=plt.cm.gray, vmin=0, vmax=1)
         fig.savefig(f'./images/full_{idx}.png')
