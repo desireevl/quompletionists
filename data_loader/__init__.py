@@ -1,8 +1,10 @@
 import torch
 import os
+import random
 
 from matplotlib import pyplot as plt
 from torchvision import datasets, transforms
+
 
 class DataTransformer(object):
     def __init__(self, dataloader):
@@ -20,15 +22,31 @@ class DataTransformer(object):
 
         try:
             label = data[1]
-        
         except:
             pass
 
-        original = data[0]
+        # Calculate x, y for cropping
+        source = data[0].clone()
+        source = source.squeeze()
+
+        original = data[0].clone()
+        w, h = (3, 3) # output size
+        _, _, tw, th = original.size()
+
+        y = random.randint(0, th - h)
+        x = random.randint(0, tw - w)
+
+        # Remove 1 dim data
+        original = original.squeeze()
+
+        # Crop
+        original = original[y:y+h, x:x+w]
+
         original = original.reshape(-1)
         target = original[-1].clone()
         original[-1] = 0.0
-        return (2, 2), original, target, label
+
+        return (2, 2), original, target, label, source, (x, y)
 
 
 file_abs_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -42,7 +60,6 @@ train_celeb_dataset_path = os.path.join(celeb_dataset_path, 'train')
 test_celeb_dataset_path = os.path.join(celeb_dataset_path, 'test')
 
 transformations = transforms.Compose([
-    transforms.RandomCrop((3, 3)),
     transforms.Grayscale(1),
     transforms.ToTensor()
 ])
@@ -85,10 +102,10 @@ test_celeb_face_loader = DataTransformer(
 
 
 if __name__ == '__main__':
-    for idx, ((i, j), X, Y, label) in enumerate(train_fashion_loader):
+    for idx, ((i, j), X, Y, label, source, (cropX, cropY)) in enumerate(train_fashion_loader):
         print(idx, (i, j), X, Y, label)
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.imshow(X.reshape(3,3), cmap=plt.cm.gray)
+        ax.imshow(source, cmap=plt.cm.gray)
         plt.show()
